@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.estore.dao.OrderLineMapper">
+	<!-- 插入一个订单项 -->
+	<insert id="insertLine" parameterType="OrderLine">
+		insert into
+		es_orderline(id,num,cost,book_id,orderForm_id)
+		values(#{id},#{num},#{cost},#{book.id},#{orderForm.id})
+	</insert>
+
+	<!-- 刪除一个订单项 -->
+	<delete id="deleteOrderLineByOrderFormId" parameterType="int">
+		delete
+		from es_orderline
+		where orderForm_id=#{orderFormId}
+	</delete>
+
+	<!-- 根据一个orderForm_id查询一个具体的订单 -->
+	<select id="selectOrderLineByOrderFormId" parameterType="int" resultMap="OrderLineResultMap">
+		select *
+		from es_orderline
+		where orderform_id=#{orderFormId}
+	</select>
+	
+	<resultMap type="OrderLine" id="OrderLineResultMap">
+		<!--根据地址id查询书籍信息   -->
+		<association column="book_id" select="com.briup.estore.dao.BookMapper.selectBookById" property="book"></association>
+	</resultMap>
+</mapper>

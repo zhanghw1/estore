@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 
+  "-//mybatis.org//DTD Mapper 3.0//EN" 
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.estore.dao.OrderFormMapper">
+	<!-- 插入一个订单 -->
+	<insert id="insertOrder" parameterType="OrderForm" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+		insert into
+		es_orderform(id,cost,orderDate,shopAddress_id,customer_id)
+		values(#{id},#{cost},#{orderdate},#{shopAddress.id},#{customer.id})
+	</insert>
+
+	<!-- 根据顾客的id查询所有的订单信息 -->
+	<select id="selectOrderFormByCustId" parameterType="int" resultMap="OrderformResultMap">
+		
+		select *
+		from es_orderform
+		where customer_id=#{custId} 
+	</select>
+	
+	<resultMap type="OrderForm" id="OrderformResultMap">
+		<!--根据地址id查询地址信息   -->
+		<association column="shopAddress_id" select="com.briup.estore.dao.ShopAddressMapper.selectAddressById" property="shopAddress"></association>
+	</resultMap>
+	
+	<!-- 删除一个订单 -->
+	<delete id="deleteOrderFormById" parameterType="int">
+		delete 
+		from es_orderform
+		where id=#{Id}
+	</delete>
+</mapper>
